@@ -2,7 +2,7 @@
   "name": "marionette.binding",
   "version": "0.0.11",
   "description": "Marionette.js bindings",
-  "main": "lib/marionette.binding.js",
+  "main": "marionette.binding.js",
   "dependencies": {
     "backbone": "^1.2.1",
     "backbone.marionette": "^2.4.2",
