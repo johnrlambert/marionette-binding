@@ -5,21 +5,12 @@ Marionette Binding
 
 Copyright 2015 Pebble
 */
-let Marionette = null;
-/*
-if(window['Backbone'] && window['Marionette']){
-  Marionette = Backbone.Marionette;
-} else{
-  Marionette = require('backbone.marionette');
-}
-*/
+
 
 /*
 This looks after a value to monitor on the model. This allows us to do
 some neat things such as "value__isnull" a la Django style
 */
-var _ = require('underscore');
-
 export class ModelValue {
   constructor(model, key){
     this.model = model;
@@ -96,20 +87,19 @@ export class Binding {
 export class ValueBinding extends Binding {
   start(){
     // Initial Value
-    this.element.value = this.val.get();
+    this.element.val(this.val.get());
 
     // Update
     var eventHandler = () => {
       this.val.set(this.element.val(), {_sender: this.element});
     };
-    this.element.addEventListener("keyup", eventHandler);
-    this.element.addEventListener("change", eventHandler);
-    this.element.addEventListener("__updated", eventHandler);
-    
+    this.element.on("keyup", eventHandler).on(
+      "change", eventHandler).on("__updated", eventHandler);
+
     // Listen to changes
     this.val.change((model, value, options) => {
       if(options['_sender'] == this.element) return; // Don't loop!
-      this.element.value = this.val.get();
+      this.element.val(this.val.get());
     });
   }
 }
@@ -233,7 +223,7 @@ export let Bindings = {
 
 export let BindingMixin = {
   bindings: {},
-  onAttach: function(){
+  onRender: function(){
     this.startBindings();
   },
 
@@ -266,13 +256,10 @@ export let BindingMixin = {
         if(el == undefined){
           // keeps it working + choice by
           // https://bocoup.com/weblog/jquery-fastest-way-to-select-nothing/
-          //el = this.$(false);
-          el = false
+          el = this.$(false);
         }
       } else{ // everything else
-        //el = this.$(el);
-        //el = this.el
-        el = document.getElementById(el)
+        el = this.$(el);
       }
 
       let lookup = what.split('__');
