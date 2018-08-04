@@ -18,6 +18,8 @@ if(window['Backbone'] && window['Marionette']){
 This looks after a value to monitor on the model. This allows us to do
 some neat things such as "value__isnull" a la Django style
 */
+var _ = require('underscore');
+
 export class ModelValue {
   constructor(model, key){
     this.model = model;
